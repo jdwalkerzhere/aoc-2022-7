@@ -36,7 +36,7 @@ def read_command_line(lines):
     return root, dir_sizes
 
 def part1(li_of_sizes, max_size):
-    return sum([size for size in li_of_sizes if size < max_size])
+    return sum([size for size in li_of_sizes if size <= max_size])
 
 def part2(li_of_sizes, os_size, occupied_mem, needed_size):
     need = abs((os_size - occupied_mem) - needed_size)
