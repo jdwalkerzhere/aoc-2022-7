@@ -8,27 +8,23 @@ def read_command_line(lines):
     root = directory()
     curr_dir = root
     # Dir Sizes holds all directories sizes
-    # Previous Dirs functions as a stack for backtracking
-    dir_sizes, previous_dirs = [], []
+    dir_sizes = []
     for line in lines:
         curr_line = line.split()
         if curr_line[0] == '$' and curr_line[1] == 'cd':
             # Return to Root command
             if curr_line[2] == '/':
-                while previous_dirs:
-                    previous_dirs[-1].size += curr_dir.size
-                    curr_dir = previous_dirs[-1]
-                    previous_dirs.pop()
+                while curr_dir.parent:
+                    curr_dir.parent.size += curr_dir.size
+                    curr_dir = curr_dir.parent
             # Return to Previous Directory Command
             if curr_line[2] == '..':
                 dir_sizes.append(curr_dir.size)
-                previous_dirs[-1].size += curr_dir.size
-                curr_dir = previous_dirs[-1]
-                previous_dirs.pop()
+                curr_dir.parent.size += curr_dir.size
+                curr_dir = curr_dir.parent
             # Move into New Directory Command
             else:
                 curr_dir.children[curr_line[2]] = directory(parent=curr_dir)
-                previous_dirs.append(curr_dir)
                 curr_dir = curr_dir.children[curr_line[2]]
         # ls Command
         elif curr_line[0] == '$': continue
